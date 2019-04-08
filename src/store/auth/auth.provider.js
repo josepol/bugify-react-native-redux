@@ -1,6 +1,5 @@
-import * as axios from 'axios'
-import { loginAction, loginErrorAction, registerAction, registerErrorAction } from './auth.actions'
-import { ENDPOINT } from '../../app.constants'
+import * as axios from 'axios';
+import { loginAction, loginErrorAction } from './auth.actions';
 
 export const loginProvider = (loginData) => {
     return dispatch => axios.post(`http://apibuggify.polsastre.com/auth/login`, loginData)
