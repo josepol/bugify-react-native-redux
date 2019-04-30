@@ -7,9 +7,9 @@ import {listBugsProvider} from '../../store/bugs/bugs.provider';
 import Theme from '../../theme';
 import { FlatList } from 'react-native-gesture-handler';
 import BugCardComponent from './components/bug-card.component';
+import ActionButton from 'react-native-action-button';
 
 const mapStateToProps = (state, props) => {
-    console.log(state);
     return {
         bugs: state.bugs.bugs
     }
@@ -25,9 +25,12 @@ class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            language: ''
+            language: '',
+            isGrid: false,
+            flatListKey: 'list'
         }
         this._logout = this._logout.bind(this);
+        this._changeListType = this._changeListType.bind(this);
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -58,14 +61,36 @@ class HomeScreen extends Component {
         this.props.navigation.navigate('Login');
     }
 
+    _changeListType() {
+        this.setState({
+            isGrid: !this.state.isGrid,
+            flatListKey: !this.state.isGrid ? 'grid' : 'list'
+        });
+    }
+
+    _renderFloatingButton() {
+        return (
+            <ActionButton buttonColor={Theme.primaryColor} renderIcon={() => <Icon name='plus' color='white'/>}>
+                <ActionButton.Item buttonColor={Theme.softPrimaryColor} title={this.state.isGrid ? 'List': 'Grid'} onPress={this._changeListType}>
+                    <Icon name={this.state.isGrid ? 'list': 'th'} style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+                <ActionButton.Item buttonColor={Theme.primaryColor} title="Add bug" onPress={() => {}}>
+                    <Icon name="plus" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+            </ActionButton>
+        );
+    }
+
     render() {
         return <View>
             <FlatList
+                key={this.state.flatListKey}
                 data={this.props && this.props.bugs ? this.props.bugs : []}
                 renderItem={({item}) => <BugCardComponent bug={item}/>}
                 keyExtractor={(item, index) => index.toString()}
-                numColumns={3}
+                numColumns={this.state.isGrid ? 3 : 1}
             ></FlatList>
+            {this._renderFloatingButton()}
         </View>
     }
 }
@@ -76,7 +101,12 @@ const styles = StyleSheet.create({
     },
     navigationIconRight: {
         marginRight: 20
-    }
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

@@ -57,7 +57,7 @@ class BugCardComponent extends Component {
                     </SafeAreaView>
                     </NativeModal>
                     <Modal isVisible={this.state.bugDeleteModalVisible} onBackdropPress={() => this.setBugDeleteModalVisible(!this.state.bugDeleteModalVisible)}>
-                    <Confirmation/>
+                        <Confirmation/>
                     </Modal>
             </View></TouchableOpacity>
         );
@@ -93,15 +93,7 @@ const styles = StyleSheet.create({
         color: Theme.primaryColor,
         fontWeight: 'normal',
         marginTop: 30,
-    },
-    modalContent: {
-        backgroundColor: "white",
-        padding: 22,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-    },
+    }
 });
 
  
