@@ -6,6 +6,7 @@ export default class Theme {
     static white = 'white';
     static grey = 'rgba(158, 158, 158, 1)';
     static red = 'red';
+    static grey = 'grey';
 }
 
 export const styles = StyleSheet.create({

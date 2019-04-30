@@ -6,8 +6,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {listBugsProvider} from '../../store/bugs/bugs.provider';
 import Theme from '../../theme';
 import { FlatList } from 'react-native-gesture-handler';
+import BugCardComponent from './components/bug-card.component';
 
 const mapStateToProps = (state, props) => {
+    console.log(state);
     return {
         bugs: state.bugs.bugs
     }
@@ -58,23 +60,11 @@ class HomeScreen extends Component {
 
     render() {
         return <View>
-            <Text>Home</Text>
-            <TouchableOpacity onPress={() => {this.props.navigation.navigate('Login')}}>
-                        <Text style={styles.loginButtonText}>LOGOUT</Text>
-                    </TouchableOpacity>
-            <Picker
-                selectedValue={this.state.language}
-                style={{ height: 50, width: 100 }}
-                onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ language: itemValue })
-                }>
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-            </Picker>
             <FlatList
-                data={this.props.bugs}
-                renderItem={(item) => <Text>item.title</Text>}
+                data={this.props && this.props.bugs ? this.props.bugs : []}
+                renderItem={({item}) => <BugCardComponent bug={item}/>}
                 keyExtractor={(item, index) => index.toString()}
+                numColumns={3}
             ></FlatList>
         </View>
     }
