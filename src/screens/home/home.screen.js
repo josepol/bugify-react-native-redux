@@ -26,8 +26,8 @@ class HomeScreen extends Component {
         super();
         this.state = {
             language: '',
-            isGrid: false,
-            flatListKey: 'list'
+            isGrid: true,
+            flatListKey: 'grid'
         }
         this._logout = this._logout.bind(this);
         this._changeListType = this._changeListType.bind(this);
@@ -53,7 +53,6 @@ class HomeScreen extends Component {
         if (prevProps === this.props) {
             return;
         }
-        console.log(this.props.bugs);
     }
 
     _logout() {
@@ -71,7 +70,7 @@ class HomeScreen extends Component {
     _renderFloatingButton() {
         return (
             <ActionButton buttonColor={Theme.primaryColor} renderIcon={() => <Icon name='plus' color='white'/>}>
-                <ActionButton.Item buttonColor={Theme.softPrimaryColor} title={this.state.isGrid ? 'List': 'Grid'} onPress={this._changeListType}>
+                <ActionButton.Item buttonColor={Theme.grey} title={this.state.isGrid ? 'List': 'Grid'} onPress={this._changeListType}>
                     <Icon name={this.state.isGrid ? 'list': 'th'} style={styles.actionButtonIcon} />
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor={Theme.primaryColor} title="Add bug" onPress={() => {}}>
@@ -82,13 +81,14 @@ class HomeScreen extends Component {
     }
 
     render() {
-        return <View>
+        return <View style={styles.container}>
             <FlatList
                 key={this.state.flatListKey}
+                showsHorizontalScrollIndicator={false}
                 data={this.props && this.props.bugs ? this.props.bugs : []}
-                renderItem={({item}) => <BugCardComponent bug={item}/>}
+                renderItem={({item}) => <BugCardComponent bug={item} isGrid={this.state.isGrid}/>}
                 keyExtractor={(item, index) => index.toString()}
-                numColumns={this.state.isGrid ? 3 : 1}
+                numColumns={this.state.isGrid ? 2 : 1}
             ></FlatList>
             {this._renderFloatingButton()}
         </View>
@@ -96,6 +96,11 @@ class HomeScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+    },
     navigationIcon: {
         marginLeft: 20
     },

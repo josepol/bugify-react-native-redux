@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import Theme from '../../../theme';
 import Confirmation from '../../../components/confirmation';
 
+
 class BugCardComponent extends Component {
 
     state = {
@@ -11,7 +12,7 @@ class BugCardComponent extends Component {
         bugDeleteModalVisible: false
     };
 
-    constructor(props) {
+    constructor() {
         super();
         this._bugLongPress = this._bugLongPress.bind(this);
         this._bugPress = this._bugPress.bind(this);
@@ -35,7 +36,7 @@ class BugCardComponent extends Component {
 
     render() { 
         return (
-            <TouchableOpacity onPress={this._bugPress} onLongPress={this._bugLongPress} style={styles.touchable}><View style={styles.card}>
+            <TouchableOpacity onPress={this._bugPress} onLongPress={this._bugLongPress} style={styleWithProps({isGrid: this.props.isGrid}).touchable}><View style={styles.card}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode='head'>{this.props.bug.title}</Text>
                 <Text style={styles.description} numberOfLines={4} ellipsizeMode='tail'>{this.props.bug.description}</Text>
                 <NativeModal
@@ -64,11 +65,13 @@ class BugCardComponent extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+const styleWithProps = ({isGrid}) => StyleSheet.create({
     touchable: {
-        flex: 1,
-        flexDirection: 'column',
-    },
+        flexBasis: isGrid ? '50%' : '100%'
+    }
+});
+
+const styles = StyleSheet.create({
     card: {
         backgroundColor: Theme.softPrimaryColor,
         borderRadius: 5,
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         overflow: 'hidden',
         padding: 5,
-        backgroundColor: Theme.primaryColor,
+        backgroundColor: Theme.grey,
         color: Theme.white,
         fontWeight: 'bold',
     },
