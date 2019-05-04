@@ -10,3 +10,11 @@ export function listBugsProvider(token) {
     .then(response => dispatch(listBugs(response.data)))
     .catch(error => dispatch(listBugsError(error)));
 }
+
+export function deleteBugProvider(token, bugId) {
+    return dispatch => axios.get(`http://apibuggify.polsastre.com/bug/destroy/${bugId}`, {
+        headers: {
+            authorization: token
+        }
+    });
+}

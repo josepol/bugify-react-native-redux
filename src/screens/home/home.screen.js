@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback, Picker, TouchableOpac
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {listBugsProvider} from '../../store/bugs/bugs.provider';
+import {listBugsProvider, deleteBugProvider} from '../../store/bugs/bugs.provider';
 import Theme from '../../theme';
 import { FlatList } from 'react-native-gesture-handler';
 import BugCardComponent from './components/bug-card.component';
@@ -17,7 +17,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        listBugs: (token) => dispatch(listBugsProvider(token))
+        listBugs: (token) => dispatch(listBugsProvider(token)),
+        deleteBug: (token, bugId) => dispatch(deleteBugProvider(token, bugId))
     }
 }
 
@@ -31,6 +32,7 @@ class HomeScreen extends Component {
         }
         this._logout = this._logout.bind(this);
         this._changeListType = this._changeListType.bind(this);
+        this._deleteBug = this._deleteBug.bind(this)
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -67,6 +69,13 @@ class HomeScreen extends Component {
         });
     }
 
+    _deleteBug(bug) {
+        AsyncStorage.getItem('token').then(token => this.props.deleteBug(token, bug.id).then(data => {
+            console.log('asdasd');
+            console.log(data);
+        }));
+    }
+
     _renderFloatingButton() {
         return (
             <ActionButton buttonColor={Theme.primaryColor} renderIcon={() => <Icon name='plus' color='white'/>}>
@@ -86,7 +95,7 @@ class HomeScreen extends Component {
                 key={this.state.flatListKey}
                 showsHorizontalScrollIndicator={false}
                 data={this.props && this.props.bugs ? this.props.bugs : []}
-                renderItem={({item}) => <BugCardComponent bug={item} isGrid={this.state.isGrid}/>}
+                renderItem={({item}) => <BugCardComponent bug={item} isGrid={this.state.isGrid} deleteBug={() => this._deleteBug(item)}/>}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={this.state.isGrid ? 2 : 1}
             ></FlatList>

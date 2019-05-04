@@ -16,6 +16,7 @@ class BugCardComponent extends Component {
         super();
         this._bugLongPress = this._bugLongPress.bind(this);
         this._bugPress = this._bugPress.bind(this);
+        this._confirmationCallback = this._confirmationCallback.bind(this)
     }
 
     setBugModalVisible(visible) {
@@ -32,6 +33,13 @@ class BugCardComponent extends Component {
 
     _bugLongPress() {
         this.setBugDeleteModalVisible(!this.state.bugDeleteModalVisible);
+    }
+
+    _confirmationCallback(status) {
+        if (status) {
+            this.props.deleteBug();
+        }
+        this.setBugDeleteModalVisible(false);
     }
 
     render() { 
@@ -58,7 +66,7 @@ class BugCardComponent extends Component {
                     </SafeAreaView>
                     </NativeModal>
                     <Modal isVisible={this.state.bugDeleteModalVisible} onBackdropPress={() => this.setBugDeleteModalVisible(!this.state.bugDeleteModalVisible)}>
-                        <Confirmation/>
+                        <Confirmation confirmationCallback={this._confirmationCallback}/>
                     </Modal>
             </View></TouchableOpacity>
         );
